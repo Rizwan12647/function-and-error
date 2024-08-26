@@ -13,56 +13,46 @@ To run this program, you can use Remix, an online Solidity IDE. To get started, 
 
 Once you are on the Remix website, create a new file by clicking on the "+" icon in the left-hand sidebar. Save the file with a .sol extension (e.g., HelloWorld.sol). Copy and paste the following code into the file:
 
-```javascript
-// SPDX-License-Identifier: MIT
+```// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract FuncErrorHandling {
+contract Fee {
     
-    address public Accowner;
+    address public Student;
     uint256 public balance;
     
     constructor() {
-        Accowner = msg.sender;
+        Student = msg.sender;
         balance = 0;
     }
     
-    // Function to deposit ether 
+    // Function to deposit fee of Student 
     function deposit() public payable {
+
+         // Using require() to ensure the caller is the owner
+        require(msg.sender == Student, "Only the Student can access");
+
         // Using require() to check for a valid deposit amount
         require(msg.value > 0, "Deposit amount must be greater than zero");
-        
         balance += msg.value;
-    }
-    
-    // Function to withdraw ether 
-    function withdraw(uint256 amount) public {
-        // Using require() to ensure the caller is the owner
-        require(msg.sender == Accowner, "Only the owner can withdraw funds");
-        // Using require() to check sufficient balance
-        require(balance >= amount, "Insufficient balance");
-        
-        balance -= amount;
-        payable(Accowner).transfer(amount);
     }
     
     // Function to demonstrate the use of assert()
     function checkInvariant() public view {
-        // Using assert() to check an invariant condition
+        // Using assert() to check an invariant condition like the peending fee of student must be equal or greater than 0
         assert(balance >= 0);
     }
     
     // Function to demonstrate the use of revert() with custom error message
     function resetBalance() public {
-        // Only the owner can reset the balance
-        if (msg.sender != Accowner) {
-            revert("Only the owner can reset the balance");
+        // Only the Student can access all detaails and do transaction
+        if (msg.sender != Student) {
+            revert("Only the Student can do transaction");
         }
         
         balance = 0;
     }
 }
-
 ```
 
 To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set to "0.8.4" (or another compatible version), and then click on the "Compilefuncanderror.sol" button.
